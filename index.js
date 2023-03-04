@@ -117,8 +117,17 @@ function AddDepartment() {
     ])
     .then(answers => {
       // Use user feedback for... whatever!!
+      db.query(
+        `INSERT INTO department (name) VALUES (?)`,
+        [answers.depName],
+        function (err, results) {
+          if (err) throw err;
+          console.table(results);
+          promptChoices();
+        },
+      );
 
-      promptChoices();
+      // promptChoices();
     })
     .catch(error => {
       if (error.isTtyError) {
@@ -147,13 +156,29 @@ function addRole() {
         type: 'list',
         name: 'department',
         message: 'Which department does the role belong to?',
-        choices: ['Engineering', 'Fanance', 'Legal', 'Sales', 'Service'],
+        choices: [
+          { name: 'Engineering', value: 1 },
+          { name: 'Fanance', value: 2 },
+          { name: 'Legal', value: 3 },
+          { name: 'Sales', value: 4 },
+          { name: 'Service', value: 5 },
+        ],
       },
     ])
     .then(answers => {
       // Use user feedback for... whatever!!
 
-      promptChoices();
+      db.query(
+        `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
+        [answers.name, answers.salary, answers.department],
+        function (err, results) {
+          if (err) throw err;
+          console.table(results);
+          promptChoices();
+        },
+      );
+
+      // promptChoices();
     })
     .catch(error => {
       if (error.isTtyError) {
@@ -229,19 +254,31 @@ function updateEmployeeRole() {
         name: 'role',
         message: 'Which role do you want to assign  the selected employee?',
         choices: [
-          'Sales Lead',
-          'Sales Person',
-          'Software Ingineer',
-          'Account Manager',
-          'Accountant',
-          'Legal Team Lead',
-          'Lawyer',
-          'Lead Engineer',
+          { name: 'Sales Lead', value: 1 },
+          { name: 'Sales Person', value: 2 },
+          { name: 'Software Ingineer', value: 3 },
+          { name: 'Account Manager', value: 4 },
+          { name: 'Accountant', value: 5 },
+          { name: 'Legal Team Lead', value: 6 },
+          { name: 'Lawyer', value: 7 },
+          { name: 'Lead Engineer', value: 8 },
         ],
       },
     ])
     .then(answers => {
       // Use user feedback for... whatever!!
+      let [firstName, lastName] = answers.employee.split(' ');
+      console.log('first name is:', firstName);
+      console.log('last name is:', lastName);
+      db.query(
+        `UPDATE employee Set role = ? WHERE first_name, = firstName  AND LAST_NAME = lastName`,
+        [answers.role],
+        function (err, results) {
+          if (err) throw err;
+          console.table(results);
+          promptChoices();
+        },
+      );
 
       promptChoices();
     })
