@@ -1,9 +1,9 @@
 // Import and require mysql2
 const db = require('./db/connnection');
-console.log(db);
+// console.log(db);
 // Import and require inquirer
 const inquirer = require('inquirer');
-
+const consoleTable = require('console.table');
 // ASCII-art Logo
 const logo = require('asciiart-logo');
 const config = require('./package.json');
@@ -33,6 +33,36 @@ function promptChoices() {
     .then(answers => {
       console.log(answers);
       // Use user feedback for... whatever!!
+      switch (answers.choice) {
+        case 'View all employees':
+          viewAllEmployees();
+          break;
+
+        case 'Add an employee':
+          addEmployee();
+          break;
+        case 'Update an employee role':
+          updateEmployeeRole();
+          break;
+        case 'View all roles':
+          viewAllRoles();
+          break;
+
+        case 'Add a role':
+          addRole();
+          break;
+
+        case 'View all departments':
+          viewAllDepartments();
+          break;
+
+        case 'Add a Department':
+          AddDepartment();
+          break;
+        case 'Quit':
+        default:
+          break;
+      }
     })
     .catch(error => {
       if (error.isTtyError) {
@@ -43,12 +73,36 @@ function promptChoices() {
     });
 }
 
+promptChoices();
+
 // view functions
-function viewAllDepartments() {}
+function viewAllDepartments() {
+  // Query database
+  db.query('SELECT * FROM department', function (err, results) {
+    if (err) throw err;
+    // console.log('Hello');
+    console.table(results);
+    promptChoices();
+  });
+}
 
-function viewAllRoles() {}
+function viewAllRoles() {
+  db.query('SELECT * FROM role', function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    promptChoices();
+  });
+  // promptChoices();
+}
 
-function viewAllEmployees() {}
+function viewAllEmployees() {
+  db.query('SELECT * FROM employee', function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    promptChoices();
+  });
+  // promptChoices();
+}
 
 // add functions
 function AddDepartment() {
