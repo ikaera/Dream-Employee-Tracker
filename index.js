@@ -37,18 +37,161 @@ function promptChoices() {
     });
 }
 
-function viewAllEmployees() {}
-
-function addEmployee() {}
-
-function updateEmployeeRole() {}
+// view functions
+function viewAllDepartments() {}
 
 function viewAllRoles() {}
 
-function addRole() {}
+function viewAllEmployees() {}
 
-function viewAllSepartments() {}
+// add functions
+function AddDepartment() {
+  inquirer
+    .prompt([
+      /* Pass your questions in here */
+      {
+        type: 'input',
+        name: 'depName',
+        message: 'What is the name of the department?',
+      },
+    ])
+    .then(answers => {
+      // Use user feedback for... whatever!!
 
-function AddDepartment() {}
+      promptChoices();
+    })
+    .catch(error => {
+      if (error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+      } else {
+        // Something else went wrong
+      }
+    });
+}
+
+function addRole() {
+  inquirer
+    .prompt([
+      /* Pass your questions in here */
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of the role?',
+      },
+      {
+        type: 'input',
+        name: 'salary',
+        message: 'What is the salary of the role?',
+      },
+      {
+        type: 'list',
+        name: 'department',
+        message: 'Which department does the role belong to?',
+        choices: ['Engineering', 'Fanance', 'Legal', 'Sales', 'Service'],
+      },
+    ])
+    .then(answers => {
+      // Use user feedback for... whatever!!
+
+      promptChoices();
+    })
+    .catch(error => {
+      if (error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+      } else {
+        // Something else went wrong
+      }
+    });
+}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      /* Pass your questions in here */
+      {
+        type: 'input',
+        name: 'firstName',
+        message: 'What is the employee’s first name?',
+      },
+      {
+        type: 'input',
+        name: 'lastName',
+        message: 'What is the employee’s last name??',
+      },
+      {
+        type: 'list',
+        name: 'role',
+        message: 'What is the employee’s role?',
+        choices: [
+          'Sales Lead',
+          'Sales Person',
+          'Software Ingineer',
+          'Account Manager',
+          'Accountant',
+          'Legal Team Lead',
+          'Lawyer',
+          'Lead Engineer',
+        ],
+      },
+      {
+        type: 'list',
+        name: 'manager',
+        message: "Who is the employee's manager?",
+        choices: ['None', 'John Dow', 'Mike Chan', 'Ashley Rodiguez'],
+      },
+    ])
+    .then(answers => {
+      // Use user feedback for... whatever!!
+
+      promptChoices();
+    })
+    .catch(error => {
+      if (error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+      } else {
+        // Something else went wrong
+      }
+    });
+}
+
+function updateEmployeeRole() {
+  inquirer
+    .prompt([
+      /* Pass your questions in here */
+      {
+        type: 'list',
+        name: 'employee',
+        message: 'Which employee’s role do you want to update?',
+        choices: ['John Dow', 'Mike Chan', 'Ashley Rodiguez'],
+      },
+      {
+        type: 'list',
+        name: 'role',
+        message: 'Which role do you want to assign  the selected employee?',
+        choices: [
+          'Sales Lead',
+          'Sales Person',
+          'Software Ingineer',
+          'Account Manager',
+          'Accountant',
+          'Legal Team Lead',
+          'Lawyer',
+          'Lead Engineer',
+        ],
+      },
+    ])
+    .then(answers => {
+      // Use user feedback for... whatever!!
+
+      promptChoices();
+    })
+    .catch(error => {
+      if (error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+      } else {
+        // Something else went wrong
+      }
+    });
+}
 
 function quit() {}
