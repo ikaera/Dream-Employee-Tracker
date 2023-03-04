@@ -4,6 +4,12 @@ console.log(db);
 // Import and require inquirer
 const inquirer = require('inquirer');
 
+// ASCII-art Logo
+const logo = require('asciiart-logo');
+const config = require('./package.json');
+
+console.log(logo(config).render());
+
 function promptChoices() {
   inquirer
     .prompt([
@@ -195,3 +201,17 @@ function updateEmployeeRole() {
 }
 
 function quit() {}
+
+// Bonus
+function updateEmployeeManagers() {}
+
+function viewEmployeesByManager() {}
+
+function viewEmployeesByDepartment() {}
+
+function deleteDepartments() {}
+function deletRoles() {}
+function deleteEmployees() {}
+
+// View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
+function viewTotalUtilizedBudgetOfDepartment() {}
