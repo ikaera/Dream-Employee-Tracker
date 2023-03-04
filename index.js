@@ -31,7 +31,7 @@ function promptChoices() {
       },
     ])
     .then(answers => {
-      console.log(answers);
+      // console.log(answers);
       // Use user feedback for... whatever!!
       switch (answers.choice) {
         case 'View all employees':
@@ -60,6 +60,9 @@ function promptChoices() {
           AddDepartment();
           break;
         case 'Quit':
+          console.log('Have a good day, please!');
+          process.exit();
+        // break;
         default:
           break;
       }
@@ -96,11 +99,14 @@ function viewAllRoles() {
 }
 
 function viewAllEmployees() {
-  db.query('SELECT * FROM employee', function (err, results) {
-    if (err) throw err;
-    console.table(results);
-    promptChoices();
-  });
+  db.query(
+    'SELECT * FROM employee JOIN role ON employee.role_id = role.id',
+    function (err, results) {
+      if (err) throw err;
+      console.table(results);
+      promptChoices();
+    },
+  );
   // promptChoices();
 }
 
@@ -157,10 +163,10 @@ function addRole() {
         name: 'department',
         message: 'Which department does the role belong to?',
         choices: [
-          { name: 'Engineering', value: 1 },
-          { name: 'Fanance', value: 2 },
-          { name: 'Legal', value: 3 },
-          { name: 'Sales', value: 4 },
+          { name: 'Engineering', value: 2 },
+          { name: 'Fanance', value: 3 },
+          { name: 'Legal', value: 4 },
+          { name: 'Sales', value: 1 },
           { name: 'Service', value: 5 },
         ],
       },
@@ -177,7 +183,6 @@ function addRole() {
           promptChoices();
         },
       );
-
       // promptChoices();
     })
     .catch(error => {
@@ -209,13 +214,10 @@ function addEmployee() {
         message: 'What is the employee’s role?',
         choices: [
           'Sales Lead',
-          'Sales Person',
+          'Salesperson',
+          'Lead Engineer',
           'Software Ingineer',
           'Account Manager',
-          'Accountant',
-          'Legal Team Lead',
-          'Lawyer',
-          'Lead Engineer',
         ],
       },
       {
@@ -266,13 +268,14 @@ function updateEmployeeRole() {
       },
     ])
     .then(answers => {
+      console.log(answers.role);
       // Use user feedback for... whatever!!
       let [firstName, lastName] = answers.employee.split(' ');
       console.log('first name is:', firstName);
       console.log('last name is:', lastName);
       db.query(
-        `UPDATE employee Set role = ? WHERE first_name, = firstName  AND LAST_NAME = lastName`,
-        [answers.role],
+        `UPDATE employee SET role_id = ? WHERE first_name = "${firstName}" AND last_name = "${lastName}"`,
+        answers.role,
         function (err, results) {
           if (err) throw err;
           console.table(results);
@@ -290,7 +293,10 @@ function updateEmployeeRole() {
     });
 }
 
-function quit() {}
+// function quit() {
+//   console.log('Good Bye!');
+//   exit()
+// }
 
 // Bonus
 function updateEmployeeManagers() {}
