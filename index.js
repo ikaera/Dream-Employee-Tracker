@@ -279,8 +279,7 @@ function updateEmployeeRole() {
           promptChoices();
         },
       );
-
-      promptChoices();
+      // promptChoices();
     })
     .catch(error => {
       if (error.isTtyError) {
