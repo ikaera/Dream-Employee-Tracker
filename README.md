@@ -56,7 +56,7 @@ SO THAT I can organize and plan my business
 ### Links
 
 - Walkthrough Video:
-- GitHub Repo:
+- GitHub Repo: https://github.com/ikaera/Dream-Employee-Tracker
 
 ## Credits
 

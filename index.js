@@ -103,14 +103,13 @@ function viewAllRoles() {
 }
 
 function viewAllEmployees() {
-  db.query(
-    "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id, CONCAT (manager.first_name, ' ', manager.last_name) AS manager_name FROM employee JOIN role ON employee.role_id = role.id JOIN employee manager ON employee.manager_id = manager.id ",
-    function (err, results) {
-      if (err) throw err;
-      console.table(results);
-      promptChoices();
-    },
-  );
+  const sql =
+    "SELECT employee.id, employee.first_name As First_Name, employee.last_name AS Last_Name, role.title as Title,department.name AS Department_Name, role.salary AS Salary, CONCAT (manager.first_name, ' ', manager.last_name) AS Manager_Name FROM role JOIN employee ON employee.role_id = role.id JOIN employee manager ON employee.manager_id = manager.id JOIN department on department.id = role.department_id";
+  db.query(sql, function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    promptChoices();
+  });
   // promptChoices();
 }
 
