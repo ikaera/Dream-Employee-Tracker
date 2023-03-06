@@ -379,11 +379,10 @@ function updateEmployeeManagers() {
 }
 
 function viewEmployeesByManager() {
-  const sql =
-    "SELECT employee.manager_id, employee.first_name, employee.last_name, employee.role_id    FROM employee GROUP BY employee.manager_id";
+  const sql = `SELECT CONCAT(m.first_name, ' ', m.last_name) AS 'Manager_Name', employee.first_name AS 'E_First_Name', employee.last_name AS 'E_Last_Name', employee.role_id FROM employee left JOIN employee m ON employee.manager_id = m.id  ORDER BY employee.manager_id; `;
   db.query(sql, function (err, result) {
     if (err) throw err;
-    console.table(results);
+    console.table(result);
     promptChoices();
   });
 }
