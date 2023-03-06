@@ -1,12 +1,12 @@
 // Import and require mysql2
-const db = require('./db/connnection');
+const db = require("./db/connnection");
 // console.log(db);
 // Import and require inquirer
-const inquirer = require('inquirer');
-const consoleTable = require('console.table');
+const inquirer = require("inquirer");
+const consoleTable = require("console.table");
 // ASCII-art Logo
-const logo = require('asciiart-logo');
-const config = require('./package.json');
+const logo = require("asciiart-logo");
+const config = require("./package.json");
 
 console.log(logo(config).render());
 
@@ -15,59 +15,59 @@ function promptChoices() {
     .prompt([
       /* Pass your questions in here */
       {
-        type: 'list',
-        name: 'choice',
-        message: 'What would you like to do?',
+        type: "list",
+        name: "choice",
+        message: "What would you like to do?",
         choices: [
-          'View all employees',
-          'Add an employee',
-          'Update an employee role',
-          'View all roles',
-          'Add a role',
-          'View all departments',
-          'Add a Department',
-          'Quit',
+          "View all employees",
+          "Add an employee",
+          "Update an employee role",
+          "View all roles",
+          "Add a role",
+          "View all departments",
+          "Add a Department",
+          "Quit",
         ],
       },
     ])
-    .then(answers => {
+    .then((answers) => {
       // console.log(answers);
       // Use user feedback for... whatever!!
       switch (answers.choice) {
-        case 'View all employees':
+        case "View all employees":
           viewAllEmployees();
           break;
 
-        case 'Add an employee':
+        case "Add an employee":
           addEmployee();
           break;
-        case 'Update an employee role':
+        case "Update an employee role":
           updateEmployeeRole();
           break;
-        case 'View all roles':
+        case "View all roles":
           viewAllRoles();
           break;
 
-        case 'Add a role':
+        case "Add a role":
           addRole();
           break;
 
-        case 'View all departments':
+        case "View all departments":
           viewAllDepartments();
           break;
 
-        case 'Add a Department':
+        case "Add a Department":
           AddDepartment();
           break;
-        case 'Quit':
-          console.log('Have a good day, please!');
+        case "Quit":
+          console.log("Have a good day, please!");
           process.exit();
         // break;
         default:
           break;
       }
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.isTtyError) {
         // Prompt couldn't be rendered in the current environment
       } else {
@@ -81,7 +81,7 @@ promptChoices();
 // view functions
 function viewAllDepartments() {
   // Query database
-  db.query('SELECT * FROM department', function (err, results) {
+  db.query("SELECT * FROM department", function (err, results) {
     if (err) throw err;
     // console.log('Hello');
     console.table(results);
@@ -90,7 +90,7 @@ function viewAllDepartments() {
 }
 
 function viewAllRoles() {
-  db.query('SELECT * FROM role', function (err, results) {
+  db.query("SELECT * FROM role", function (err, results) {
     if (err) throw err;
     console.table(results);
     promptChoices();
@@ -100,7 +100,7 @@ function viewAllRoles() {
 
 function viewAllEmployees() {
   db.query(
-    'SELECT * FROM employee JOIN role ON employee.role_id = role.id',
+    "SELECT * FROM employee JOIN role ON employee.role_id = role.id",
     function (err, results) {
       if (err) throw err;
       console.table(results);
@@ -116,12 +116,12 @@ function AddDepartment() {
     .prompt([
       /* Pass your questions in here */
       {
-        type: 'input',
-        name: 'depName',
-        message: 'What is the name of the department?',
+        type: "input",
+        name: "depName",
+        message: "What is the name of the department?",
       },
     ])
-    .then(answers => {
+    .then((answers) => {
       // Use user feedback for... whatever!!
       db.query(
         `INSERT INTO department (name) VALUES (?)`,
@@ -135,7 +135,7 @@ function AddDepartment() {
 
       // promptChoices();
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.isTtyError) {
         // Prompt couldn't be rendered in the current environment
       } else {
@@ -149,29 +149,29 @@ function addRole() {
     .prompt([
       /* Pass your questions in here */
       {
-        type: 'input',
-        name: 'name',
-        message: 'What is the name of the role?',
+        type: "input",
+        name: "name",
+        message: "What is the name of the role?",
       },
       {
-        type: 'input',
-        name: 'salary',
-        message: 'What is the salary of the role?',
+        type: "input",
+        name: "salary",
+        message: "What is the salary of the role?",
       },
       {
-        type: 'list',
-        name: 'department',
-        message: 'Which department does the role belong to?',
+        type: "list",
+        name: "department",
+        message: "Which department does the role belong to?",
         choices: [
-          { name: 'Engineering', value: 2 },
-          { name: 'Fanance', value: 3 },
-          { name: 'Legal', value: 4 },
-          { name: 'Sales', value: 1 },
-          { name: 'Service', value: 5 },
+          { name: "Engineering", value: 2 },
+          { name: "Fanance", value: 3 },
+          { name: "Legal", value: 4 },
+          { name: "Sales", value: 1 },
+          { name: "Service", value: 5 },
         ],
       },
     ])
-    .then(answers => {
+    .then((answers) => {
       // Use user feedback for... whatever!!
 
       db.query(
@@ -185,7 +185,7 @@ function addRole() {
       );
       // promptChoices();
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.isTtyError) {
         // Prompt couldn't be rendered in the current environment
       } else {
@@ -199,40 +199,40 @@ function addEmployee() {
     .prompt([
       /* Pass your questions in here */
       {
-        type: 'input',
-        name: 'firstName',
-        message: 'What is the employee’s first name?',
+        type: "input",
+        name: "firstName",
+        message: "What is the employee’s first name?",
       },
       {
-        type: 'input',
-        name: 'lastName',
-        message: 'What is the employee’s last name??',
+        type: "input",
+        name: "lastName",
+        message: "What is the employee’s last name??",
       },
       {
-        type: 'list',
-        name: 'role',
-        message: 'What is the employee’s role?',
+        type: "list",
+        name: "role",
+        message: "What is the employee’s role?",
         choices: [
-          'Sales Lead',
-          'Salesperson',
-          'Lead Engineer',
-          'Software Ingineer',
-          'Account Manager',
+          "Sales Lead",
+          "Salesperson",
+          "Lead Engineer",
+          "Software Ingineer",
+          "Account Manager",
         ],
       },
       {
-        type: 'list',
-        name: 'manager',
+        type: "list",
+        name: "manager",
         message: "Who is the employee's manager?",
-        choices: ['None', 'John Dow', 'Mike Chan', 'Ashley Rodiguez'],
+        choices: ["None", "John Dow", "Mike Chan", "Ashley Rodiguez"],
       },
     ])
-    .then(answers => {
+    .then((answers) => {
       // Use user feedback for... whatever!!
 
       promptChoices();
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.isTtyError) {
         // Prompt couldn't be rendered in the current environment
       } else {
@@ -246,33 +246,33 @@ function updateEmployeeRole() {
     .prompt([
       /* Pass your questions in here */
       {
-        type: 'list',
-        name: 'employee',
-        message: 'Which employee’s role do you want to update?',
-        choices: ['John Dow', 'Mike Chan', 'Ashley Rodiguez'],
+        type: "list",
+        name: "employee",
+        message: "Which employee’s role do you want to update?",
+        choices: ["John Dow", "Mike Chan", "Ashley Rodiguez"],
       },
       {
-        type: 'list',
-        name: 'role',
-        message: 'Which role do you want to assign  the selected employee?',
+        type: "list",
+        name: "role",
+        message: "Which role do you want to assign  the selected employee?",
         choices: [
-          { name: 'Sales Lead', value: 1 },
-          { name: 'Sales Person', value: 2 },
-          { name: 'Software Ingineer', value: 3 },
-          { name: 'Account Manager', value: 4 },
-          { name: 'Accountant', value: 5 },
-          { name: 'Legal Team Lead', value: 6 },
-          { name: 'Lawyer', value: 7 },
-          { name: 'Lead Engineer', value: 8 },
+          { name: "Sales Lead", value: 1 },
+          { name: "Sales Person", value: 2 },
+          { name: "Software Ingineer", value: 3 },
+          { name: "Account Manager", value: 4 },
+          { name: "Accountant", value: 5 },
+          { name: "Legal Team Lead", value: 6 },
+          { name: "Lawyer", value: 7 },
+          { name: "Lead Engineer", value: 8 },
         ],
       },
     ])
-    .then(answers => {
+    .then((answers) => {
       console.log(answers.role);
       // Use user feedback for... whatever!!
-      let [firstName, lastName] = answers.employee.split(' ');
-      console.log('first name is:', firstName);
-      console.log('last name is:', lastName);
+      let [firstName, lastName] = answers.employee.split(" ");
+      console.log("first name is:", firstName);
+      console.log("last name is:", lastName);
       db.query(
         `UPDATE employee SET role_id = ? WHERE first_name = "${firstName}" AND last_name = "${lastName}"`,
         answers.role,
@@ -284,7 +284,7 @@ function updateEmployeeRole() {
       );
       // promptChoices();
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.isTtyError) {
         // Prompt couldn't be rendered in the current environment
       } else {
@@ -311,3 +311,5 @@ function deleteEmployees() {}
 
 // View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
 function viewTotalUtilizedBudgetOfDepartment() {}
+
+// the end
