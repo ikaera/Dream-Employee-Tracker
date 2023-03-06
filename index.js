@@ -26,6 +26,7 @@ function promptChoices() {
           "Add a role",
           "View all departments",
           "Add a Department",
+          "Update employee managers",
           "Quit",
         ],
       },
@@ -58,6 +59,9 @@ function promptChoices() {
 
         case "Add a Department":
           AddDepartment();
+          break;
+        case "Update employee managers":
+          updateEmployeeManagers();
           break;
         case "Quit":
           console.log("Have a good day, please!");
@@ -100,7 +104,7 @@ function viewAllRoles() {
 
 function viewAllEmployees() {
   db.query(
-    "SELECT * FROM employee JOIN role ON employee.role_id = role.id",
+    "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id, CONCAT (manager.first_name, ' ', manager.last_name) AS manager_name FROM employee JOIN role ON employee.role_id = role.id JOIN employee manager ON employee.manager_id = manager.id ",
     function (err, results) {
       if (err) throw err;
       console.table(results);
@@ -213,24 +217,38 @@ function addEmployee() {
         name: "role",
         message: "What is the employee’s role?",
         choices: [
-          "Sales Lead",
-          "Salesperson",
-          "Lead Engineer",
-          "Software Ingineer",
-          "Account Manager",
+          { name: "Sales Lead", value: 1 },
+          { name: "Salesperson", value: 2 },
+          { name: "Lead Engineer", value: 3 },
+          { name: "Software Ingineer", value: 4 },
+          { name: "Account Manager", value: 4 },
         ],
       },
       {
         type: "list",
         name: "manager",
         message: "Who is the employee's manager?",
-        choices: ["None", "John Dow", "Mike Chan", "Ashley Rodiguez"],
+        choices: [
+          { name: "None", value: null },
+          { name: "John Dow", value: 1 },
+          { name: "Mike Chan", value: 2 },
+          { name: "Ashley Rodiguez", value: 3 },
+        ],
       },
     ])
     .then((answers) => {
       // Use user feedback for... whatever!!
+      db.query(
+        `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
+        [answers.firstName, answers.lastName, answers.role, answers.manager],
+        function (err, results) {
+          if (err) throw err;
+          console.table(results);
+          promptChoices();
+        },
+      );
 
-      promptChoices();
+      // promptChoices();
     })
     .catch((error) => {
       if (error.isTtyError) {
@@ -249,7 +267,11 @@ function updateEmployeeRole() {
         type: "list",
         name: "employee",
         message: "Which employee’s role do you want to update?",
-        choices: ["John Dow", "Mike Chan", "Ashley Rodiguez"],
+        choices: [
+          { name: "John Dow", value: 1 },
+          { name: "Mike Chan", value: 2 },
+          { name: "Ashley Rodiguez", value: 3 },
+        ],
       },
       {
         type: "list",
@@ -270,12 +292,12 @@ function updateEmployeeRole() {
     .then((answers) => {
       console.log(answers.role);
       // Use user feedback for... whatever!!
-      let [firstName, lastName] = answers.employee.split(" ");
-      console.log("first name is:", firstName);
-      console.log("last name is:", lastName);
+      // let [firstName, lastName] = answers.employee.split(" ");
+      // console.log("first name is:", firstName);
+      // console.log("last name is:", lastName);
       db.query(
-        `UPDATE employee SET role_id = ? WHERE first_name = "${firstName}" AND last_name = "${lastName}"`,
-        answers.role,
+        `UPDATE employee SET role_id = ? WHERE id = ?`,
+        [answers.role, answers.employee],
         function (err, results) {
           if (err) throw err;
           console.table(results);
@@ -299,7 +321,56 @@ function updateEmployeeRole() {
 // }
 
 // Bonus
-function updateEmployeeManagers() {}
+function updateEmployeeManagers() {
+  inquirer
+    .prompt([
+      /* Pass your questions in here */
+      {
+        type: "list",
+        name: "employee",
+        message: "Which employee’s role do you want to update?",
+        choices: [
+          { name: "John Dow", value: 1 },
+          { name: "Mike Chan", value: 2 },
+          { name: "Ashley Rodiguez", value: 3 },
+        ],
+      },
+      {
+        type: "list",
+        name: "manager",
+        message: "Who is your new manager?",
+        choices: [
+          { name: "John Dow", value: 1 },
+          { name: "Mike Chan", value: 2 },
+          { name: "Ashley Rodiguez", value: 3 },
+        ],
+      },
+    ])
+    .then((answers) => {
+      console.log(answers.role);
+      // Use user feedback for... whatever!!
+      // let [firstName, lastName] = answers.employee.split(" ");
+      // console.log("first name is:", firstName);
+      // console.log("last name is:", lastName);
+      db.query(
+        `UPDATE employee SET manager_id = ? WHERE id = ?`,
+        [answers.manager, answers.employee],
+        function (err, results) {
+          if (err) throw err;
+          console.table(results);
+          promptChoices();
+        },
+      );
+      // promptChoices();
+    })
+    .catch((error) => {
+      if (error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+      } else {
+        // Something else went wrong
+      }
+    });
+}
 
 function viewEmployeesByManager() {}
 
