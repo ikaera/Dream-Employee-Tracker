@@ -27,6 +27,7 @@ function promptChoices() {
           "View all departments",
           "Add a Department",
           "Update employee managers",
+          "View employees by manager",
           "Quit",
         ],
       },
@@ -63,6 +64,10 @@ function promptChoices() {
         case "Update employee managers":
           updateEmployeeManagers();
           break;
+        case "View employees by manager":
+          viewEmployeesByManager();
+          break;
+
         case "Quit":
           console.log("Have a good day, please!");
           process.exit();
@@ -94,7 +99,9 @@ function viewAllDepartments() {
 }
 
 function viewAllRoles() {
-  db.query("SELECT * FROM role", function (err, results) {
+  const sql =
+    "SELECT role.title AS Job_Title, role.id, department.name AS Department_Name, role.salary AS Salary FROM role JOIN department ON role.department_id = department.id";
+  db.query(sql, function (err, results) {
     if (err) throw err;
     console.table(results);
     promptChoices();
@@ -371,9 +378,24 @@ function updateEmployeeManagers() {
     });
 }
 
-function viewEmployeesByManager() {}
+function viewEmployeesByManager() {
+  const sql =
+    "SELECT employee.manager_id, employee.first_name, employee.last_name, employee.role_id    FROM employee GROUP BY employee.manager_id";
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    console.table(results);
+    promptChoices();
+  });
+}
 
-function viewEmployeesByDepartment() {}
+function viewEmployeesByDepartment() {
+  // const sql = "";
+  // db.query(sql, function (err, result) {
+  //   if(err) throw err;
+  //   console.table(results);
+  //   promptChoices();
+  // })
+}
 
 function deleteDepartments() {}
 function deletRoles() {}
