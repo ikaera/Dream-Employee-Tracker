@@ -11,7 +11,7 @@
 
 AS A business owner
 I WANT to be able to view and manage the departments, roles, and employees in my company
-SO THAT I can organize and plan my business
+SO THAT I can organize and plan my business.
 
 ## Features
 
@@ -55,7 +55,8 @@ SO THAT I can organize and plan my business
 
 ### Links
 
-- Walkthrough Video:
+- Walkthrough Video: https://drive.google.com/file/d/1uNM82qr2e_ukvFUynYGt_yf8hPqtRoek/view
+
 - GitHub Repo: https://github.com/ikaera/Dream-Employee-Tracker
 
 ## Credits
