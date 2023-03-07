@@ -155,114 +155,153 @@ function AddDepartment() {
 }
 
 function addRole() {
-  inquirer
-    .prompt([
-      /* Pass your questions in here */
-      {
-        type: "input",
-        name: "name",
-        message: "What is the name of the role?",
-      },
-      {
-        type: "input",
-        name: "salary",
-        message: "What is the salary of the role?",
-      },
-      {
-        type: "list",
-        name: "department",
-        message: "Which department does the role belong to?",
-        choices: [
-          { name: "Engineering", value: 2 },
-          { name: "Fanance", value: 3 },
-          { name: "Legal", value: 4 },
-          { name: "Sales", value: 1 },
-          { name: "Service", value: 5 },
-        ],
-      },
-    ])
-    .then((answers) => {
-      // Use user feedback for... whatever!!
+  db.query("SELECT * FROM department", function (err, results) {
+    if (err) throw err;
+    // console.log('Hello');
+    console.log(results);
 
-      db.query(
-        `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
-        [answers.name, answers.salary, answers.department],
-        function (err, results) {
-          if (err) throw err;
-          console.table(results);
-          promptChoices();
-        },
-      );
-      // promptChoices();
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-      } else {
-        // Something else went wrong
-      }
+    const deptChoices = results.map((item) => {
+      return { name: item.name, value: item.id };
     });
+
+    // promptChoices();
+    inquirer
+      .prompt([
+        /* Pass your questions in here */
+        {
+          type: "input",
+          name: "name",
+          message: "What is the name of the role?",
+        },
+        {
+          type: "input",
+          name: "salary",
+          message: "What is the salary of the role?",
+        },
+        {
+          type: "list",
+          name: "department",
+          message: "Which department does the role belong to?",
+          choices: deptChoices,
+          // choices: [
+          // { name: "Engineering", value: 2 },
+          // { name: "Fanance", value: 3 },
+          // { name: "Legal", value: 4 },
+          // { name: "Sales", value: 1 },
+          // { name: "Service", value: 5 },
+          // ],
+        },
+      ])
+      .then((answers) => {
+        // Use user feedback for... whatever!!
+
+        db.query(
+          `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
+          [answers.name, answers.salary, answers.department],
+          function (err, results) {
+            if (err) throw err;
+            console.table(results);
+            promptChoices();
+          },
+        );
+        // promptChoices();
+      })
+      .catch((error) => {
+        if (error.isTtyError) {
+          // Prompt couldn't be rendered in the current environment
+        } else {
+          // Something else went wrong
+        }
+      });
+  });
 }
 
 function addEmployee() {
-  inquirer
-    .prompt([
-      /* Pass your questions in here */
-      {
-        type: "input",
-        name: "firstName",
-        message: "What is the employee’s first name?",
-      },
-      {
-        type: "input",
-        name: "lastName",
-        message: "What is the employee’s last name??",
-      },
-      {
-        type: "list",
-        name: "role",
-        message: "What is the employee’s role?",
-        choices: [
-          { name: "Sales Lead", value: 1 },
-          { name: "Salesperson", value: 2 },
-          { name: "Lead Engineer", value: 3 },
-          { name: "Software Ingineer", value: 4 },
-          { name: "Account Manager", value: 4 },
-        ],
-      },
-      {
-        type: "list",
-        name: "manager",
-        message: "Who is the employee's manager?",
-        choices: [
-          { name: "None", value: null },
-          { name: "John Dow", value: 1 },
-          { name: "Mike Chan", value: 2 },
-          { name: "Ashley Rodiguez", value: 3 },
-        ],
-      },
-    ])
-    .then((answers) => {
-      // Use user feedback for... whatever!!
-      db.query(
-        `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
-        [answers.firstName, answers.lastName, answers.role, answers.manager],
-        function (err, results) {
-          if (err) throw err;
-          console.table(results);
-          promptChoices();
-        },
-      );
+  db.query("SELECT * FROM role", function (err, results) {
+    if (err) throw err;
+    // console.log('Hello');
+    console.log(results);
 
-      // promptChoices();
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-      } else {
-        // Something else went wrong
-      }
+    const roleChoices = results.map((item) => {
+      return { name: item.title, value: item.id };
     });
+
+    db.query("SELECT * FROM employee", function (err, eResults) {
+      if (err) throw err;
+      // console.log('Hello');
+      console.log(eResults);
+
+      const eChoices = eResults.map((item) => {
+        return { name: item.first_name + " " + item.last_name, value: item.id };
+      });
+      eChoices.push({ name: "No Manager", value: null });
+      inquirer
+        .prompt([
+          /* Pass your questions in here */
+          {
+            type: "input",
+            name: "firstName",
+            message: "What is the employee’s first name?",
+          },
+          {
+            type: "input",
+            name: "lastName",
+            message: "What is the employee’s last name??",
+          },
+          {
+            type: "list",
+            name: "role",
+            message: "What is the employee’s role?",
+            choices: roleChoices,
+            // choices: [
+            // { name: "Sales Lead", value: 1 },
+            // { name: "Salesperson", value: 2 },
+            // { name: "Lead Engineer", value: 3 },
+            // { name: "Software Ingineer", value: 4 },
+            // { name: "Account Manager", value: 4 },
+            // ],
+          },
+          {
+            type: "list",
+            name: "manager",
+            message: "Who is the employee's manager?",
+            choices: eChoices,
+            // [
+            //   { name: "None", value: null },
+            //   { name: "John Dow", value: 1 },
+            //   { name: "Mike Chan", value: 2 },
+            //   { name: "Ashley Rodiguez", value: 3 },
+            // ],
+          },
+        ])
+        .then((answers) => {
+          // Use user feedback for... whatever!!
+          db.query(
+            `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
+            [
+              answers.firstName,
+              answers.lastName,
+              answers.role,
+              answers.manager,
+            ],
+            function (err, results) {
+              if (err) throw err;
+              console.table(results);
+              promptChoices();
+            },
+          );
+
+          // promptChoices();
+        })
+        .catch((error) => {
+          if (error.isTtyError) {
+            // Prompt couldn't be rendered in the current environment
+          } else {
+            // Something else went wrong
+          }
+        });
+    });
+  });
 }
 
 function updateEmployeeRole() {
