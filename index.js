@@ -111,7 +111,7 @@ function viewAllRoles() {
 
 function viewAllEmployees() {
   const sql =
-    "SELECT employee.id, employee.first_name As First_Name, employee.last_name AS Last_Name, role.title as Title,department.name AS Department_Name, role.salary AS Salary, CONCAT (manager.first_name, ' ', manager.last_name) AS Manager_Name FROM role JOIN employee ON employee.role_id = role.id JOIN employee manager ON employee.manager_id = manager.id JOIN department on department.id = role.department_id";
+    "SELECT employee.id, employee.first_name As First_Name, employee.last_name AS Last_Name, role.title as Title,department.name AS Department_Name, role.salary AS Salary, CONCAT (manager.first_name, ' ', manager.last_name) AS Manager_Name FROM role CROSS JOIN employee ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id LEFT JOIN department on department.id = role.department_id";
   db.query(sql, function (err, results) {
     if (err) throw err;
     console.table(results);
@@ -158,7 +158,7 @@ function addRole() {
   db.query("SELECT * FROM department", function (err, results) {
     if (err) throw err;
     // console.log('Hello');
-    console.log(results);
+    // console.log(results);
 
     const deptChoices = results.map((item) => {
       return { name: item.name, value: item.id };
@@ -220,7 +220,7 @@ function addEmployee() {
   db.query("SELECT * FROM role", function (err, results) {
     if (err) throw err;
     // console.log('Hello');
-    console.log(results);
+    // console.log(results);
 
     const roleChoices = results.map((item) => {
       return { name: item.title, value: item.id };
@@ -360,11 +360,6 @@ function updateEmployeeRole() {
     });
 }
 
-// function quit() {
-//   console.log('Good Bye!');
-//   exit()
-// }
-
 // Bonus
 function updateEmployeeManagers() {
   inquirer
@@ -393,8 +388,6 @@ function updateEmployeeManagers() {
     ])
     .then((answers) => {
       console.log(answers.role);
-      // Use user feedback for... whatever!!
-      // let [firstName, lastName] = answers.employee.split(" ");
       // console.log("first name is:", firstName);
       // console.log("last name is:", lastName);
       db.query(
