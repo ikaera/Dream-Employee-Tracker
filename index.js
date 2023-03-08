@@ -19,13 +19,13 @@ function promptChoices() {
         name: "choice",
         message: "What would you like to do?",
         choices: [
-          "View all employees",
-          "Add an employee",
+          "View Employees",
+          "View Roles",
+          "View Departments",
+          "Add Employee",
+          "Add Role",
+          "Add Department",
           "Update an employee role",
-          "View all roles",
-          "Add a role",
-          "View all departments",
-          "Add a Department",
           "Update employee managers",
           "View employees by manager",
           "Quit",
@@ -36,29 +36,29 @@ function promptChoices() {
       // console.log(answers);
       // Use user feedback for... whatever!!
       switch (answers.choice) {
-        case "View all employees":
+        case "View Employees":
           viewAllEmployees();
           break;
 
-        case "Add an employee":
+        case "Add Employee":
           addEmployee();
           break;
         case "Update an employee role":
           updateEmployeeRole();
           break;
-        case "View all roles":
+        case "View Roles":
           viewAllRoles();
           break;
 
-        case "Add a role":
+        case "Add Role":
           addRole();
           break;
 
-        case "View all departments":
+        case "View Departments":
           viewAllDepartments();
           break;
 
-        case "Add a Department":
+        case "Add Department":
           AddDepartment();
           break;
         case "Update employee managers":
@@ -335,7 +335,7 @@ function updateEmployeeRole() {
       },
     ])
     .then((answers) => {
-      console.log(answers.role);
+      // console.log(answers.role);
       // Use user feedback for... whatever!!
       // let [firstName, lastName] = answers.employee.split(" ");
       // console.log("first name is:", firstName);
