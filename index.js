@@ -30,7 +30,7 @@ function promptChoices() {
           "View employees by manager",
           "View employees by department",
           // "Delete Departments",
-          // "View total utilized budget of a department",
+          "View total utilized budget of a department",
 
           "Quit",
         ],
@@ -84,9 +84,9 @@ function promptChoices() {
         // case "Delete Employees":
         //   deleteEmployees();
         //   break;
-        // case "View total utilized budget of a department":
-        //   viewTotalUtilizedBudgetOfDepartment();
-        //   break;
+        case "View total utilized budget of a department":
+          viewTotalUtilizedBudgetOfDepartment();
+          break;
 
         case "Quit":
           console.log("Have a good day, please!");
@@ -470,7 +470,7 @@ function viewEmployeesByManager() {
 
 function viewEmployeesByDepartment() {
   const sql =
-    "SELECT employee.first_name, employee.last_name, department.name AS 'Department_Name' FROM employee LEFT JOIN department ON employee.id = department.id ORDER BY department.name, employee.first_name;";
+    "SELECT department.name AS 'Department_Name', employee.first_name, employee.last_name FROM employee  LEFT JOIN role on employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id  ORDER BY department.name, employee.last_name;";
   db.query(sql, function (err, result) {
     if (err) throw err;
     console.table(result);
@@ -483,6 +483,14 @@ function deletRoles() {}
 function deleteEmployees() {}
 
 // View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
-function viewTotalUtilizedBudgetOfDepartment() {}
+function viewTotalUtilizedBudgetOfDepartment() {
+  const sql =
+    " SELECT d.name, SUM(r.salary) AS total_utilized_budget    FROM employee e, department d, role r  WHERE e.role_id = r.id AND r.department_id = d.id  GROUP BY d.name;";
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.table(result);
+    promptChoices();
+  });
+}
 
 // the end
