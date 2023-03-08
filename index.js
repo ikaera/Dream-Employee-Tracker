@@ -485,7 +485,7 @@ function deleteEmployees() {}
 // View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
 function viewTotalUtilizedBudgetOfDepartment() {
   const sql =
-    " SELECT d.name, SUM(r.salary) AS total_utilized_budget    FROM employee e, department d, role r  WHERE e.role_id = r.id AND r.department_id = d.id  GROUP BY d.name;";
+    " SELECT d.name AS 'Dep_Name', SUM(r.salary) AS 'Total_Utilized_Budget'  FROM employee e, department d, role r  WHERE e.role_id = r.id AND r.department_id = d.id  GROUP BY d.name;";
   db.query(sql, (err, result) => {
     if (err) throw err;
     console.table(result);
