@@ -28,6 +28,10 @@ function promptChoices() {
           "Update an employee role",
           "Update employee managers",
           "View employees by manager",
+          "View employees by department",
+          // "Delete Departments",
+          // "View total utilized budget of a department",
+
           "Quit",
         ],
       },
@@ -68,9 +72,9 @@ function promptChoices() {
         case "View employees by manager":
           viewEmployeesByManager();
           break;
-        // case "View employees by department":
-        //   viewEmployeesByDepartment();
-        //   break;
+        case "View employees by department":
+          viewEmployeesByDepartment();
+          break;
         // case "Delete Departments":
         //   deleteDepartments();
         //   break;
@@ -456,7 +460,7 @@ function updateEmployeeManagers() {
 }
 
 function viewEmployeesByManager() {
-  const sql = `SELECT CONCAT(m.first_name, ' ', m.last_name) AS 'Manager_Name', employee.first_name AS 'E_First_Name', employee.last_name AS 'E_Last_Name', employee.role_id FROM employee left JOIN employee m ON employee.manager_id = m.id  ORDER BY employee.manager_id; `;
+  const sql = `SELECT CONCAT(m.first_name, ' ', m.last_name) AS 'Manager_Name', employee.first_name AS 'E_First_Name', employee.last_name AS 'E_Last_Name' FROM employee left JOIN employee m ON employee.manager_id = m.id  ORDER BY employee.manager_id; `;
   db.query(sql, function (err, result) {
     if (err) throw err;
     console.table(result);
@@ -465,12 +469,13 @@ function viewEmployeesByManager() {
 }
 
 function viewEmployeesByDepartment() {
-  // const sql = "";
-  // db.query(sql, function (err, result) {
-  //   if(err) throw err;
-  //   console.table(results);
-  //   promptChoices();
-  // })
+  const sql =
+    "SELECT employee.first_name, employee.last_name, department.name AS 'Department_Name' FROM employee LEFT JOIN department ON employee.id = department.id ORDER BY department.name, employee.first_name;";
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    promptChoices();
+  });
 }
 
 function deleteDepartments() {}

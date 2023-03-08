@@ -9,8 +9,8 @@ ORDER BY employee.manager_id;
 USE employee_db;
 SELECT employee.first_name, employee.last_name, department.name AS 'Department_Name'
 FROM employee
-JOIN department ON employee.id = department.id
-ORDER BY department.name;
+LEFT JOIN department ON employee.id = department.id
+ORDER BY department.name, employee.last_name;
 
 -- Delete departments, roles, and employees.
 USE employee_db;
