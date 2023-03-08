@@ -40,33 +40,49 @@ function promptChoices() {
           viewAllEmployees();
           break;
 
+        case "View Roles":
+          viewAllRoles();
+          break;
+        case "View Departments":
+          viewAllDepartments();
+          break;
+
         case "Add Employee":
           addEmployee();
           break;
         case "Update an employee role":
           updateEmployeeRole();
           break;
-        case "View Roles":
-          viewAllRoles();
-          break;
 
         case "Add Role":
           addRole();
           break;
 
-        case "View Departments":
-          viewAllDepartments();
-          break;
-
         case "Add Department":
           AddDepartment();
           break;
+
         case "Update employee managers":
           updateEmployeeManagers();
           break;
         case "View employees by manager":
           viewEmployeesByManager();
           break;
+        // case "View employees by department":
+        //   viewEmployeesByDepartment();
+        //   break;
+        // case "Delete Departments":
+        //   deleteDepartments();
+        //   break;
+        // case "Delete Roles":
+        //   deletRoles();
+        //   break;
+        // case "Delete Employees":
+        //   deleteEmployees();
+        //   break;
+        // case "View total utilized budget of a department":
+        //   viewTotalUtilizedBudgetOfDepartment();
+        //   break;
 
         case "Quit":
           console.log("Have a good day, please!");
@@ -194,7 +210,6 @@ function addRole() {
       ])
       .then((answers) => {
         // Use user feedback for... whatever!!
-
         db.query(
           `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
           [answers.name, answers.salary, answers.department],
@@ -229,7 +244,7 @@ function addEmployee() {
     db.query("SELECT * FROM employee", function (err, eResults) {
       if (err) throw err;
       // console.log('Hello');
-      console.log(eResults);
+      // console.log(eResults);
 
       const eChoices = eResults.map((item) => {
         return { name: item.first_name + " " + item.last_name, value: item.id };
@@ -246,7 +261,7 @@ function addEmployee() {
           {
             type: "input",
             name: "lastName",
-            message: "What is the employee’s last name??",
+            message: "What is the employee’s last name?",
           },
           {
             type: "list",
@@ -305,109 +320,139 @@ function addEmployee() {
 }
 
 function updateEmployeeRole() {
-  inquirer
-    .prompt([
-      /* Pass your questions in here */
-      {
-        type: "list",
-        name: "employee",
-        message: "Which employee’s role do you want to update?",
-        choices: [
-          { name: "John Dow", value: 1 },
-          { name: "Mike Chan", value: 2 },
-          { name: "Ashley Rodiguez", value: 3 },
-        ],
-      },
-      {
-        type: "list",
-        name: "role",
-        message: "Which role do you want to assign  the selected employee?",
-        choices: [
-          { name: "Sales Lead", value: 1 },
-          { name: "Sales Person", value: 2 },
-          { name: "Software Ingineer", value: 3 },
-          { name: "Account Manager", value: 4 },
-          { name: "Accountant", value: 5 },
-          { name: "Legal Team Lead", value: 6 },
-          { name: "Lawyer", value: 7 },
-          { name: "Lead Engineer", value: 8 },
-        ],
-      },
-    ])
-    .then((answers) => {
-      // console.log(answers.role);
-      // Use user feedback for... whatever!!
-      // let [firstName, lastName] = answers.employee.split(" ");
-      // console.log("first name is:", firstName);
-      // console.log("last name is:", lastName);
-      db.query(
-        `UPDATE employee SET role_id = ? WHERE id = ?`,
-        [answers.role, answers.employee],
-        function (err, results) {
-          if (err) throw err;
-          console.table(results);
-          promptChoices();
-        },
-      );
-      // promptChoices();
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-      } else {
-        // Something else went wrong
-      }
+  db.query("SELECT * FROM employee", (err, eResults) => {
+    if (err) throw err;
+    // console.log(eResults);
+    const employeeChoices = eResults.map((item) => {
+      return { name: item.first_name + " " + item.last_name, value: item.id };
     });
+    // console.log(employeeChoices);
+
+    db.query("SELECT * FROM role", (err, roleResults) => {
+      if (err) throw err;
+
+      const roleChoices = roleResults.map((item) => {
+        return { name: item.title, value: item.id };
+      });
+
+      inquirer
+        .prompt([
+          /* Pass your questions in here */
+          {
+            type: "list",
+            name: "employee",
+            message: "Which employee’s role do you want to update?",
+            choices: employeeChoices,
+            // [
+            //   { name: "John Dow", value: 1 },
+            //   { name: "Mike Chan", value: 2 },
+            //   { name: "Ashley Rodiguez", value: 3 },
+            // ],
+          },
+          {
+            type: "list",
+            name: "role",
+            message: "Which role do you want to assign  the selected employee?",
+            choices: roleChoices,
+            // [
+            //   { name: "Sales Lead", value: 1 },
+            //   { name: "Sales Person", value: 2 },
+            //   { name: "Software Ingineer", value: 3 },
+            //   { name: "Account Manager", value: 4 },
+            //   { name: "Accountant", value: 5 },
+            //   { name: "Legal Team Lead", value: 6 },
+            //   { name: "Lawyer", value: 7 },
+            //   { name: "Lead Engineer", value: 8 },
+            // ],
+          },
+        ])
+        .then((answers) => {
+          // console.log(answers.role);
+          // Use user feedback for... whatever!!
+          // let [firstName, lastName] = answers.employee.split(" ");
+          // console.log("first name is:", firstName);
+          // console.log("last name is:", lastName);
+          db.query(
+            `UPDATE employee SET role_id = ? WHERE id = ?`,
+            [answers.role, answers.employee],
+            function (err, results) {
+              if (err) throw err;
+              console.table(results);
+              promptChoices();
+            },
+          );
+          // promptChoices();
+        })
+        .catch((error) => {
+          if (error.isTtyError) {
+            // Prompt couldn't be rendered in the current environment
+          } else {
+            // Something else went wrong
+          }
+        });
+    });
+  });
 }
 
 // Bonus
 function updateEmployeeManagers() {
-  inquirer
-    .prompt([
-      /* Pass your questions in here */
-      {
-        type: "list",
-        name: "employee",
-        message: "Which employee’s role do you want to update?",
-        choices: [
-          { name: "John Dow", value: 1 },
-          { name: "Mike Chan", value: 2 },
-          { name: "Ashley Rodiguez", value: 3 },
-        ],
-      },
-      {
-        type: "list",
-        name: "manager",
-        message: "Who is your new manager?",
-        choices: [
-          { name: "John Dow", value: 1 },
-          { name: "Mike Chan", value: 2 },
-          { name: "Ashley Rodiguez", value: 3 },
-        ],
-      },
-    ])
-    .then((answers) => {
-      console.log(answers.role);
-      // console.log("first name is:", firstName);
-      // console.log("last name is:", lastName);
-      db.query(
-        `UPDATE employee SET manager_id = ? WHERE id = ?`,
-        [answers.manager, answers.employee],
-        function (err, results) {
-          if (err) throw err;
-          console.table(results);
-          promptChoices();
-        },
-      );
-      // promptChoices();
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-      } else {
-        // Something else went wrong
-      }
+  db.query("SELECT * FROM employee", function (err, eResults) {
+    if (err) throw err;
+    // console.log('Hello');
+    // console.log(eResults);
+
+    const eChoices = eResults.map((item) => {
+      return { name: item.first_name + " " + item.last_name, value: item.id };
     });
+    inquirer
+      .prompt([
+        /* Pass your questions in here */
+        {
+          type: "list",
+          name: "employee",
+          message: "Which employee’s role do you want to update?",
+          choices: eChoices,
+          // [
+          //   { name: "John Dow", value: 1 },
+          //   { name: "Mike Chan", value: 2 },
+          //   { name: "Ashley Rodiguez", value: 3 },
+          // ],
+        },
+        {
+          type: "list",
+          name: "manager",
+          message: "Who is his/her new manager?",
+          choices: eChoices,
+          // [
+          //   { name: "John Dow", value: 1 },
+          //   { name: "Mike Chan", value: 2 },
+          //   { name: "Ashley Rodiguez", value: 3 },
+          // ],
+        },
+      ])
+      .then((answers) => {
+        console.log(answers.role);
+        // console.log("first name is:", firstName);
+        // console.log("last name is:", lastName);
+        db.query(
+          `UPDATE employee SET manager_id = ? WHERE id = ?`,
+          [answers.manager, answers.employee],
+          function (err, results) {
+            if (err) throw err;
+            console.table(results);
+            promptChoices();
+          },
+        );
+        // promptChoices();
+      })
+      .catch((error) => {
+        if (error.isTtyError) {
+          // Prompt couldn't be rendered in the current environment
+        } else {
+          // Something else went wrong
+        }
+      });
+  });
 }
 
 function viewEmployeesByManager() {
