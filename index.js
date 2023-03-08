@@ -106,7 +106,7 @@ promptChoices();
 // view functions
 function viewAllDepartments() {
   // Query database
-  db.query("SELECT * FROM department", function (err, results) {
+  db.query("SELECT * FROM department ORDER BY id", function (err, results) {
     if (err) throw err;
     // console.log('Hello');
     console.table(results);
@@ -116,7 +116,7 @@ function viewAllDepartments() {
 
 function viewAllRoles() {
   const sql =
-    "SELECT role.title AS Job_Title, role.id, department.name AS Department_Name, role.salary AS Salary FROM role JOIN department ON role.department_id = department.id";
+    "SELECT role.id, role.title AS Job_Title, department.name AS Department_Name, role.salary AS Salary FROM role JOIN department ON role.department_id = department.id";
   db.query(sql, function (err, results) {
     if (err) throw err;
     console.table(results);
