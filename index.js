@@ -31,6 +31,7 @@ function promptChoices() {
           "View employees by department",
           "Delete Departments",
           "Delete Role",
+          "Delete Employees",
           "View total utilized budget of a department",
 
           "Quit",
@@ -82,9 +83,9 @@ function promptChoices() {
         case "Delete Role":
           deletRoles();
           break;
-        // case "Delete Employees":
-        //   deleteEmployees();
-        //   break;
+        case "Delete Employees":
+          deleteEmployees();
+          break;
         case "View total utilized budget of a department":
           viewTotalUtilizedBudgetOfDepartment();
           break;
@@ -567,7 +568,49 @@ function deletRoles() {
       });
   });
 }
-function deleteEmployees() {}
+function deleteEmployees() {
+  db.query("SELECT * FROM employee", (err, employeeResults) => {
+    if (err) throw err;
+    // console.log(eResults);
+    const employeeChoices = employeeResults.map((item) => {
+      return { name: item.first_name + " " + item.last_name, value: item.id };
+    });
+    inquirer
+      .prompt([
+        /* Pass your questions in here */
+        {
+          type: "list",
+          name: "employee",
+          message: "Which employee do you want to delete?",
+          choices: employeeChoices,
+          // [
+          //   { name: "John Dow", value: 1 },
+          //   { name: "Mike Chan", value: 2 },
+          //   { name: "Ashley Rodiguez", value: 3 },
+          // ],
+        },
+      ])
+      .then((answers) => {
+        // Use user feedback for... whatever!!
+        // const sql = "DELETE FROM department  WHERE id = ? ;";
+        db.query(
+          "DELETE FROM employee  WHERE id = ? ",
+          answers.employee,
+          function (err, result) {
+            if (err) throw err;
+            promptChoices();
+          },
+        );
+      })
+      .catch((error) => {
+        if (error.isTtyError) {
+          // Prompt couldn't be rendered in the current environment
+        } else {
+          // Something else went wrong
+        }
+      });
+  });
+}
 
 // View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
 function viewTotalUtilizedBudgetOfDepartment() {
