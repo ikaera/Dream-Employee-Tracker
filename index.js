@@ -30,6 +30,7 @@ function promptChoices() {
           "View employees by manager",
           "View employees by department",
           "Delete Departments",
+          "Delete Role",
           "View total utilized budget of a department",
 
           "Quit",
@@ -78,9 +79,9 @@ function promptChoices() {
         case "Delete Departments":
           deleteDepartments();
           break;
-        // case "Delete Roles":
-        //   deletRoles();
-        //   break;
+        case "Delete Role":
+          deletRoles();
+          break;
         // case "Delete Employees":
         //   deleteEmployees();
         //   break;
@@ -131,7 +132,7 @@ function viewAllRoles() {
 
 function viewAllEmployees() {
   const sql =
-    "SELECT employee.id, employee.first_name As First_Name, employee.last_name AS Last_Name, role.title as Title,department.name AS Department_Name, role.salary AS Salary, CONCAT (manager.first_name, ' ', manager.last_name) AS Manager_Name FROM role CROSS JOIN employee ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id LEFT JOIN department on department.id = role.department_id";
+    "SELECT employee.id, employee.first_name As First_Name, employee.last_name AS Last_Name, role.title as Title,department.name AS Department_Name, role.salary AS Salary, CONCAT (manager.first_name, ' ', manager.last_name) AS Manager_Name FROM role CROSS JOIN employee ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id LEFT JOIN department on department.id = role.department_id ORDER BY employee.id";
   db.query(sql, function (err, results) {
     if (err) throw err;
     console.table(results);
@@ -523,7 +524,49 @@ function deleteDepartments() {
       });
   });
 }
-function deletRoles() {}
+function deletRoles() {
+  db.query("SELECT * FROM role", (err, roleResults) => {
+    if (err) throw err;
+    // console.log(eResults);
+    const roleChoices = roleResults.map((item) => {
+      return { name: item.title, value: item.id };
+    });
+    inquirer
+      .prompt([
+        /* Pass your questions in here */
+        {
+          type: "list",
+          name: "role",
+          message: "Which role (job_title) do you want to delete?",
+          choices: roleChoices,
+          // [
+          //   { name: "John Dow", value: 1 },
+          //   { name: "Mike Chan", value: 2 },
+          //   { name: "Ashley Rodiguez", value: 3 },
+          // ],
+        },
+      ])
+      .then((answers) => {
+        // Use user feedback for... whatever!!
+        // const sql = "DELETE FROM department  WHERE id = ? ;";
+        db.query(
+          "DELETE FROM role  WHERE id = ? ",
+          answers.role,
+          function (err, result) {
+            if (err) throw err;
+            promptChoices();
+          },
+        );
+      })
+      .catch((error) => {
+        if (error.isTtyError) {
+          // Prompt couldn't be rendered in the current environment
+        } else {
+          // Something else went wrong
+        }
+      });
+  });
+}
 function deleteEmployees() {}
 
 // View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
@@ -536,5 +579,4 @@ function viewTotalUtilizedBudgetOfDepartment() {
     promptChoices();
   });
 }
-
 // the end
