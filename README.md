@@ -17,9 +17,9 @@ SO THAT I can organize and plan my business.
 
 - Node.js
 - Inquirer.js
-- MySQL2 package
+- MySQL2
 - ASCII-art Logo
-- Console.table package
+- Console.table
 - JavaScript
 
 ## Table of Contents
@@ -50,6 +50,12 @@ SO THAT I can organize and plan my business.
   - THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 - WHEN I choose to update an employee role
   - THEN I am prompted to select an employee to update and their new role and this information is updated in the database.
+    - Also I added some additional functionalities to my application, such as the ability to do the following:
+      - Update employee managers,
+      - View employees by manager,
+      - View employees by department,
+      - Delete departments, roles, and employees,
+      - View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
 
 ## Usage
 
