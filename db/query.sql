@@ -18,6 +18,7 @@ ORDER BY department.name, employee.last_name;
 
 -- Delete departments, roles, and employees.
 USE employee_db;
+
 DELETE FROM department
 WHERE id = ;
 

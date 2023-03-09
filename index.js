@@ -29,7 +29,7 @@ function promptChoices() {
           "Update employee managers",
           "View employees by manager",
           "View employees by department",
-          // "Delete Departments",
+          "Delete Departments",
           "View total utilized budget of a department",
 
           "Quit",
@@ -75,9 +75,9 @@ function promptChoices() {
         case "View employees by department":
           viewEmployeesByDepartment();
           break;
-        // case "Delete Departments":
-        //   deleteDepartments();
-        //   break;
+        case "Delete Departments":
+          deleteDepartments();
+          break;
         // case "Delete Roles":
         //   deletRoles();
         //   break;
@@ -478,7 +478,51 @@ function viewEmployeesByDepartment() {
   });
 }
 
-function deleteDepartments() {}
+function deleteDepartments() {
+  db.query("SELECT * FROM department ", (err, departmentResults) => {
+    if (err) throw err;
+    // console.log(eResults);
+    const departmentChoices = departmentResults.map((item) => {
+      return { name: item.name, value: item.id };
+    });
+    inquirer
+      .prompt([
+        /* Pass your questions in here */
+        {
+          type: "list",
+          name: "department",
+          message: "Which department do you want to delete?",
+          choices: departmentChoices,
+          // [
+          //   { name: "John Dow", value: 1 },
+          //   { name: "Mike Chan", value: 2 },
+          //   { name: "Ashley Rodiguez", value: 3 },
+          // ],
+        },
+      ])
+      .then((answers) => {
+        // Use user feedback for... whatever!!
+        // const sql = "DELETE FROM department  WHERE id = ? ;";
+        db.query(
+          "DELETE FROM department  WHERE id = ? ",
+          answers.department,
+          function (err, result) {
+            if (err) throw err;
+            promptChoices();
+          },
+        );
+
+        // promptChoices();
+      })
+      .catch((error) => {
+        if (error.isTtyError) {
+          // Prompt couldn't be rendered in the current environment
+        } else {
+          // Something else went wrong
+        }
+      });
+  });
+}
 function deletRoles() {}
 function deleteEmployees() {}
 
