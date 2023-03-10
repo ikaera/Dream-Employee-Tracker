@@ -61,7 +61,7 @@ SO THAT I can organize and plan my business.
 
 ### Links
 
-- Walkthrough Video: https://drive.google.com/file/d/1uNM82qr2e_ukvFUynYGt_yf8hPqtRoek/view
+- Walkthrough Video: https://drive.google.com/file/d/10Cr5GyygBKw4BGkGWZZfWGYuksjLGjGw/view - old version: https://drive.google.com/file/d/1uNM82qr2e_ukvFUynYGt_yf8hPqtRoek/view
 
 - GitHub Repo: https://github.com/ikaera/Dream-Employee-Tracker
 

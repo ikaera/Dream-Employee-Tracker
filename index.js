@@ -205,13 +205,6 @@ function addRole() {
           name: "department",
           message: "Which department does the role belong to?",
           choices: deptChoices,
-          // choices: [
-          // { name: "Engineering", value: 2 },
-          // { name: "Fanance", value: 3 },
-          // { name: "Legal", value: 4 },
-          // { name: "Sales", value: 1 },
-          // { name: "Service", value: 5 },
-          // ],
         },
       ])
       .then((answers) => {
@@ -221,7 +214,7 @@ function addRole() {
           [answers.name, answers.salary, answers.department],
           function (err, results) {
             if (err) throw err;
-            console.table(results);
+            console.log("-- Role was added --");
             promptChoices();
           },
         );
@@ -307,7 +300,10 @@ function addEmployee() {
             ],
             function (err, results) {
               if (err) throw err;
-              console.table(results);
+              // console.table(results);
+              console.log(" -- Employee was added --");
+              console.table(answers);
+              // console.log("Employee was added.");
               promptChoices();
             },
           );
@@ -383,7 +379,7 @@ function updateEmployeeRole() {
             [answers.role, answers.employee],
             function (err, results) {
               if (err) throw err;
-              console.table(results);
+              console.log("-- Employee role was updated --");
               promptChoices();
             },
           );
@@ -445,7 +441,7 @@ function updateEmployeeManagers() {
           [answers.manager, answers.employee],
           function (err, results) {
             if (err) throw err;
-            console.table(results);
+            console.log("-- Employee manager was updated --");
             promptChoices();
           },
         );
